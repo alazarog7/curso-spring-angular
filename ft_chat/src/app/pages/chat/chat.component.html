@@ -1,0 +1,39 @@
+<div class="card mx-4 my-4">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+            <li class="nav-item mr-2">
+                <input type="text" class="form-control" placeholder="Ususario" [(ngModel)]="mensaje.username" *ngIf="!estadoConecccion" name="username">
+            </li>
+            <li class="nav-item mr-2">
+                <button type="button" (click)="conectar()" class="btn btn-success" *ngIf="!estadoConecccion" [disabled]="!mensaje.username">Conectar</button>
+            </li>
+            <li class="nav-item">
+                <button type="button" (click)="desconectar()" class="btn btn-warning" *ngIf="estadoConecccion">Desconectar</button>
+            </li>
+        </ul>
+    </div>
+    <div #scrollChat [scrollTop]="scrollChat.scrollHeight" class="card-body" *ngIf="estadoConecccion">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item list-group-item-light" *ngFor="let mensaje of mensajes">
+                <span *ngIf="mensaje.tipo=='NUEVO_USUARIO'">
+                        {{mensaje.fecha| date:'shortTime'}} @ <span [ngStyle]="{'color': mensaje.color}">{{mensaje.username}}</span> ingreso
+                </span>
+                <span *ngIf="mensaje.tipo!='NUEVO_USUARIO'">
+                        {{mensaje.fecha| date:'shortTime'}} @ <span [ngStyle]="{'color': mensaje.color}">{{mensaje.username}}</span> dice:
+                <br> {{mensaje.texto}}
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div class="card-footer" *ngIf="estadoConecccion">
+        <form class="form-inline">
+            <div class="form-group mx-3">
+                <input type="text" class="form-control" placeholder="Enviar mensaje ... " [(ngModel)]="mensaje.texto" (keyup)="eventEscribir()" name="texto">
+            </div>
+            <button type="submit" class="btn btn-success" (click)="enviarMensaje()">Enviar</button>
+        </form>
+        <br>
+        <span *ngIf="estadoEscribiendo">{{estadoEscribiendo}}</span>
+    </div>
+
+</div>
